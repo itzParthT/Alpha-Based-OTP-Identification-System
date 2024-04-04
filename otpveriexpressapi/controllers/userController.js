@@ -31,32 +31,31 @@ function generateString() {
 
   // const randomchar =generateString();
   // const otp = generateOTP();
-let otp;
-let  randomchar;
+  let otp;
+  let  randomchar;
+  let newPhoneNumber;
 
 class UserController {
   // Send OTP to User
   static userLogin = async (req, res) => {
     const { phonenumber } = req.body
-    const newPhoneNumber = "+91" + phonenumber
-    var params = {
-            timeout: 300
-    };
+     newPhoneNumber = "+91" + phonenumber
+  
+    
 
     randomchar =generateString();
     otp = generateOTP();
 
-            
-       
-          console.log(`Your OTP code is: ${randomchar} - ${otp}`);    
+    console.log(`Your OTP code is: ${randomchar} - ${otp}`);    
 
-    // client.messages
+    client.messages
     // .create({
     //     from: '+12568500060',
     //     to: `${newPhoneNumber}`,
-    //     body: `Your OTP code is: ${ generateString()} - ${generateOTP()}`,     
+    //     body:`Your OTP code is: ${randomchar} - ${otp} for txn of INR 100.00 on Apna Bank Card.`,     
     // })
-    //   .then(message => console.log(message.body));
+   
+    //    .then(message => console.log(message.body));
 
     res.status(200).send({ "status": "success", "message": "OTP Send Successfully", "id": 201 ,"identity":`${randomchar}`})
   }
@@ -64,7 +63,18 @@ class UserController {
   static userResend = async (req, res) => {
     otp = generateOTP();
     randomchar = generateString();
-    console.log(`Your OTP code is: ${randomchar} - ${otp}`);    
+    
+    client.messages
+    .create({
+        from: '+12568500060',
+        to: `${newPhoneNumber}`,
+        body: `Your OTP code is: ${randomchar} - ${otp} for txn of INR 100.00 on Apna Bank Card.`, 
+            
+    })
+      .then(message => console.log(message.body));
+
+        
+
     res.status(200).send({"status": "success","message": "OTP Re-Send Successfully", "otp":`${otp}`, "identity":`${randomchar}`});
   }
 
@@ -79,19 +89,6 @@ class UserController {
       res.status(200).send({ "status": "failed", "message": "Invalid OTP" })
     }
     
-    // const { id, otpcode } = req.body
-    // messagebird.verify.verify(id, otpcode,
-    //   (err, response) => {
-    //     if (err) {
-    //       // Incorrect OTP
-    //       console.log("OTP Verification Error:", err)
-    //       res.status(200).send({ "status": "failed", "message": "Invalid OTP" })
-    //     } else {
-    //       // Login Success
-    //       console.log("OTP Verification Response:", response)
-    //       res.status(200).send({ "status": "success", "message": "Login Success" })
-    //     }
-    //   });
   }
 
 }

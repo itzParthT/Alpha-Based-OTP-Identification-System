@@ -30,6 +30,7 @@ const Login = () => {
         console.log(res.data.identity);
         setAlpha(res.data.identity);
         setError({ status: true, msg: res.data.message, type: 'success' })
+        
       }
       if (res.data.status === "failed") {
         setError({ status: true, msg: res.data.message, type: 'error' })
@@ -71,7 +72,14 @@ const Login = () => {
     if (actualData.otpcode && actualData.id) {
       const res = await verifyOTP(actualData)
       if (res.data.status === "success") {
+        
         setError({ status: true, msg: res.data.message, type: 'success' })
+        alert("Authentication Successful ")
+        setTimeout(() => {
+          // Reset the page or perform any other action
+          window.location.reload();
+        }, 4000);
+        // if(!alert("Authentication Successful ")){window.location.reload();}
       }
       if (res.data.status === "failed") {
         setError({ status: true, msg: res.data.message, type: 'error' })
@@ -88,14 +96,14 @@ const Login = () => {
 
       {authid === null ?
         <>
-          <Box component="form" sx={{ p: 3, display: 'flex', justifyContent: 'center' }} noValidate id="login-form" onSubmit={handleSendOTPForm}>
+          <Box component="form" sx={{  p: 3, display: 'flex', justifyContent: 'center' }} noValidate id="login-form" onSubmit={handleSendOTPForm}>
             <Paper elevation={3} sx={{ p: 3 }}>
               <TextField id="phonenumber" name="phonenumber" required fullWidth margin='normal' label='Phone Number' />
               <br />
               <Box sx={{ m: 2, display: 'flex', justifysubmit: 'center' }}>
                 <Button type='submit' variant='contained' color="error">Send OTP</Button>
               </Box>
-              {error.status ? <Alert severity={error.type}>{error.msg}</Alert> : ''}
+              {error.status ? <Alert  severity={error.type}>{error.msg}</Alert> : ''}
             </Paper>
           </Box>
         </>
@@ -105,12 +113,12 @@ const Login = () => {
         
 
 
-          <Box component="form" sx={{ p: 3, display: 'flex', justifyContent: 'center' }} noValidate id="verify-otp-form" onSubmit={handleVerifyOTPForm}>
+          <Box component="form" sx={{  p: 3, display: 'flex', justifyContent: 'center' }} noValidate id="verify-otp-form" onSubmit={handleVerifyOTPForm}>
             <Paper elevation={3} sx={{ p: 3 }}>
-            <TextField id="idcode" name="idcode" label='Identifier'  value={alpha }    disabled />
-              <TextField id="otpcode" name="otpcode" required fullWidth margin='normal' label='Enter OTP' />
+            <TextField id="idcode" name="idcode" label='Identifier'  value={alpha }    disabled sx={{ mr: 2 ,width: '9ch'  }} />
+              <TextField id="otpcode" name="otpcode"  label='Enter OTP' />
               <br />
-              <Box sx={{ m: 2, display: 'flex', justifyContent: 'center' }}>
+              <Box sx={{  m: 2, display: 'flex', justifyContent: 'center' }}>
               <Button onClick={handlereSendOTPForm} variant='contained' color="error" sx={{ mr: 2  }}>Resend OTP</Button>
                 <Button type='submit' variant='contained' color="info">Verify</Button>
                 {/* <Button type='submit' variant='contained' color="info">Resend</Button> */}
