@@ -22,22 +22,27 @@ const Login = () => {
     const actualData = {
       phonenumber: data.get('phonenumber'),
     }
-    if (actualData.phonenumber) {
+    
+    if (actualData.phonenumber.length===10)
+      { 
       const res = await loginUser(actualData)
-      if (res.data.status === "success") {
+      if (res.data.status === "success") 
+        {
         setAuthId(res.data.id)
         document.getElementById("login-form").reset()
-        console.log(res.data.identity);
+        // console.log(res.data.identity);
         setAlpha(res.data.identity);
         setError({ status: true, msg: res.data.message, type: 'success' })
-        
-      }
-      if (res.data.status === "failed") {
+        }
+      if (res.data.status === "failed") 
+        {
         setError({ status: true, msg: res.data.message, type: 'error' })
+        }
+      } 
+      else
+      {
+      setError({ status: true, msg: "Enter 10 Digit Valid Number", type: 'error' })
       }
-    } else {
-      setError({ status: true, msg: "Enter Valid Number", type: 'error' })
-    }
   }
 
   const handlereSendOTPForm = async (e) => {
@@ -90,7 +95,7 @@ const Login = () => {
   }
   return (
     <>
-      <Box display="flex" justifyContent="center" sx={{ backgroundColor: '#009999', padding: 2 }}>
+      <Box  display="flex" justifyContent="center" sx={{ backgroundColor: '#009999', padding: 2 }}>
         <Typography variant='h4' component="div" sx={{ fontWeight: 'bold', color: 'white' }}>OTP Verification</Typography>
       </Box>
 
@@ -98,7 +103,7 @@ const Login = () => {
         <>
           <Box component="form" sx={{  p: 3, display: 'flex', justifyContent: 'center' }} noValidate id="login-form" onSubmit={handleSendOTPForm}>
             <Paper elevation={3} sx={{ p: 3 }}>
-              <TextField id="phonenumber" name="phonenumber" required fullWidth margin='normal' label='Phone Number' />
+              <TextField autoFocus id="phonenumber" name="phonenumber"  required fullWidth margin='normal' label='Phone Number' inputProps={{ maxLength: 10 }} />
               <br />
               <Box sx={{ m: 2, display: 'flex', justifysubmit: 'center' }}>
                 <Button type='submit' variant='contained' color="error">Send OTP</Button>
@@ -115,8 +120,8 @@ const Login = () => {
 
           <Box component="form" sx={{  p: 3, display: 'flex', justifyContent: 'center' }} noValidate id="verify-otp-form" onSubmit={handleVerifyOTPForm}>
             <Paper elevation={3} sx={{ p: 3 }}>
-            <TextField id="idcode" name="idcode" label='Identifier'  value={alpha }    disabled sx={{ mr: 2 ,width: '9ch'  }} />
-              <TextField id="otpcode" name="otpcode"  label='Enter OTP' />
+            <TextField id="idcode" name="idcode" label='Identifier'  value={alpha}    sx={{ mr: 2 ,width: '9ch'  }} />
+              <TextField autoFocus id="otpcode" name="otpcode"  label='Enter OTP'  />
               <br />
               <Box sx={{  m: 2, display: 'flex', justifyContent: 'center' }}>
               <Button onClick={handlereSendOTPForm} variant='contained' color="error" sx={{ mr: 2  }}>Resend OTP</Button>

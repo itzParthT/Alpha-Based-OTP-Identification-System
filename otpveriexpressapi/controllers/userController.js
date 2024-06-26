@@ -2,8 +2,8 @@ import dotenv from 'dotenv'
 import twilio from "twilio";
 dotenv.config()
 
-const accountSid = 'ACbf7bbe865946aaf8fd9ea7b1f680c47d';
-const authToken = 'fa696fc3ca2017786e03e53cda7d1874'; 
+const accountSid = 'AC9de6acea217042c80611734ba56c2e9f';
+const authToken = 'a47c96bf31d4e2c256fe046a609446e3'; 
 
 //import twillio serices in client varaible
 const client = twilio(accountSid, authToken);
@@ -37,6 +37,7 @@ function generateString() {
 
 class UserController {
   // Send OTP to User
+  
   static userLogin = async (req, res) => {
     const { phonenumber } = req.body
      newPhoneNumber = "+91" + phonenumber
@@ -47,26 +48,34 @@ class UserController {
     otp = generateOTP();
 
     console.log(`Your OTP code is: ${randomchar} - ${otp}`);    
-
+    
     client.messages
-    // .create({
-    //     from: '+12568500060',
-    //     to: `${newPhoneNumber}`,
-    //     body:`Your OTP code is: ${randomchar} - ${otp} for txn of INR 100.00 on Apna Bank Card.`,     
-    // })
-   
-    //    .then(message => console.log(message.body));
-
-    res.status(200).send({ "status": "success", "message": "OTP Send Successfully", "id": 201 ,"identity":`${randomchar}`})
-  }
-
+  
+    .create({
+        from: '+14058296306',
+        to: `${newPhoneNumber}`,
+        body:`Your OTP code is: ${randomchar} - ${otp} for txn of INR 100.00 on Apna Bank Card.`,     
+       })
+       .then(message=>{console.log(message.body)
+        if(true)
+          res.status(200).send({ "status": "success", "message": "OTP Send Successfully", "id": 201 ,"identity":`${randomchar}`});
+                      })
+       .catch(error => {console.log("Error Code Twillio:-  "+error.code)
+       if(error.code){
+       console.log("Error Detected :"+error);
+       res.status(200).send({ "status": "failed", "message": "OTP Send Failed ", "id": 201 });
+                    }
+       
+  });
+      
+}
   static userResend = async (req, res) => {
     otp = generateOTP();
     randomchar = generateString();
     
     client.messages
     .create({
-        from: '+12568500060',
+        from: '+14058296306',
         to: `${newPhoneNumber}`,
         body: `Your OTP code is: ${randomchar} - ${otp} for txn of INR 100.00 on Apna Bank Card.`, 
             

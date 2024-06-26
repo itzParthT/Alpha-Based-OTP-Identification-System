@@ -8,6 +8,7 @@ body, html {
   width: 100%;
   margin: 0;
   padding: 0;
+
 }
 
 body {
@@ -17,6 +18,9 @@ body {
     rgb(66, 120, 227) 50%,
     rgb(67, 75, 143) 100%
   );
+
+  background-repeat: no-repeat;
+    background-attachment: fixed;
   
 }
 
